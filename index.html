@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shubh Labh Groceries - Festive Diwali Edition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rozha+One&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        diwali: {
+                            gold: '#D4AF37',
+                            saffron: '#FF9933',
+                            maroon: '#800000',
+                            brightYellow: '#FFF176',
+                            rose: '#FFF0F5',
+                            cream: '#FFFDF9',
+                            teal: '#008080',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        festive: ['Rozha One', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .festive-bg {
+            background-color: #FFFDF9;
+            background-image: radial-gradient(#FF9933 0.6px, transparent 0.6px), radial-gradient(#D4AF37 0.6px, #FFFDF9 0.6px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+        }
+        .diya-glow {
+            filter: drop-shadow(0 0 10px rgba(255, 153, 51, 0.6));
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFFDF9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF9933;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="festive-bg text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white text-xs md:text-sm py-2 px-4 text-center font-bold tracking-wide shadow-sm flex items-center justify-center gap-2">
+        <i data-lucide="sparkles" class="w-4 h-4 animate-spin"></i>
+        <span>🪔 DIWALI DHAMAKA SALE: Get Extra 15% OFF on Orders Above ₹1,999! Code: <strong>DIWALI2026</strong></span>
+        <i data-lucide="sparkles" class="w-4 h-4 animate-spin"></i>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-amber-200/60 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- LOGO -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 flex items-center justify-center shadow-md text-white font-bold text-2xl diya-glow">
+                        🪔
+                    </div>
+                    <div>
+                        <span class="font-festive text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">
+                            Shubh Labh
+                        </span>
+                        <span class="block text-xs font-bold tracking-widest text-amber-600 uppercase">Festive Superstore</span>
+                    </div>
+                </div>
+
+                <!-- SEARCH BAR (DESKTOP) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8 relative">
+                    <input type="text" id="searchInput" onkeyup="filterProducts()" placeholder="Search sweets, dry fruits, pooja items..." class="w-full pl-10 pr-4 py-2.5 rounded-full border border-amber-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent bg-amber-50/50 text-sm">
+                    <i data-lucide="search" class="w-5 h-5 text-amber-500 absolute left-3 top-3"></i>
+                </div>
+
+                <!-- NAV ACTIONS & CALCULATOR TOGGLE -->
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleWheelModal()" class="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-amber-100 to-orange-100 border border-orange-300 text-orange-800 text-xs font-bold px-3 py-2 rounded-full hover:shadow-md transition">
+                        <i data-lucide="gift" class="w-4 h-4 text-orange-600"></i>
+                        <span>Spin & Win</span>
+                    </button>
+
+                    <button onclick="toggleCalculator()" class="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm px-4 py-2.5 rounded-full hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/20 transition transform active:scale-95">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">Budget Calculator</span>
+                        <span id="cartCountBadge" class="bg-white text-orange-600 text-xs font-extrabold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SEARCH BAR (MOBILE) -->
+            <div class="pb-3 md:hidden">
+                <div class="relative">
+                    <input type="text" id="searchInputMobile" onkeyup="filterProductsMobile()" placeholder="Search sweets, dry fruits, staples..." class="w-full pl-10 pr-4 py-2 rounded-full border border-amber-200 focus:outline-none focus:ring-2 focus:ring-orange-400 bg-amber-50/50 text-sm">
+                    <i data-lucide="search" class="w-4 h-4 text-amber-500 absolute left-3.5 top-3"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO BANNER -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-amber-100/70 via-orange-50/50 to-transparent py-10 md:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                
+                <div class="space-y-6 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-200/60 border border-amber-300 text-amber-900 text-xs font-bold uppercase tracking-wider">
+                        <span class="text-base">✨</span> Mega Diwali Savings Offer
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight">
+                        Light Up Your Home With <span class="bg-gradient-to-r from-orange-600 to-amber-500 bg-clip-text text-transparent font-festive">Pure Flavors & Big Discounts!</span>
+                    </h1>
+                    <p class="text-slate-600 text-sm sm:text-base max-w-lg mx-auto md:mx-0">
+                        Explore authentic festive sweets, premium dry fruit gift hampers, organic ghee, pooja essentials & daily groceries delivered right to your doorstep.
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2">
+                        <a href="#products" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold rounded-full shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 hover:scale-105 transition">
+                            Shop Festive Offers
+                        </a>
+                        <button onclick="scrollToCalc()" class="px-6 py-3 bg-white border border-amber-300 text-amber-800 font-bold rounded-full hover:bg-amber-50 transition">
+                            Calculate Diwali Expense
+                        </button>
+                    </div>
+                </div>
+
+                <!-- HERO IMAGE / BANNER CARD -->
+                <div class="relative flex justify-center">
+                    <div class="w-full max-w-md bg-white p-6 rounded-3xl shadow-xl border-4 border-amber-200 relative overflow-hidden text-center">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-300/30 rounded-full blur-2xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-400/30 rounded-full blur-2xl"></div>
+                        
+                        <div class="relative z-10">
+                            <span class="inline-block bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase mb-3 animate-pulse">
+                                Bestseller Diwali Box
+                            </span>
+                            <img src="https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&q=80&w=600" 
+                                 alt="Diwali Sweet Box" 
+                                 class="w-full h-48 sm:h-56 object-cover rounded-2xl shadow-md mb-4 border border-amber-100"
+                                 onerror="this.src='https://placehold.co/600x400/FF9933/FFFFFF?text=Royal+Diwali+Hamper'">
+                            
+                            <h3 class="font-bold text-lg text-slate-800">Royal Premium Dry Fruit & Sweets Combo</h3>
+                            <div class="flex items-center justify-center gap-3 my-2">
+                                <span class="text-2xl font-extrabold text-orange-600">₹899</span>
+                                <span class="text-sm text-slate-400 line-through">₹1,499</span>
+                                <span class="text-xs bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded">40% OFF</span>
+                            </div>
+                            <button onclick="addToCart('Royal Premium Dry Fruit & Sweets Combo', 899, 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&q=80&w=600')" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm transition">
+                                Add to Diwali Basket
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CATEGORY FILTER & PRODUCTS SECTION -->
+    <main id="products" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow">
+        
+        <!-- SECTION TITLE -->
+        <div class="text-center max-w-xl mx-auto mb-8">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-festive">
+                🪔 Diwali Special Deals & Groceries 🪔
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                Handpicked fresh ingredients, festive sweets, and daily essentials with special discounts.
+            </p>
+        </div>
+
+        <!-- CATEGORIES TABS -->
+        <div class="flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto pb-4 mb-8 no-scrollbar" id="categoryContainer">
+            <button onclick="filterCategory('all')" class="cat-btn active-cat bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold text-xs sm:text-sm px-4 py-2 rounded-full shadow-sm whitespace-nowrap transition">
+                All Products
+            </button>
+            <button onclick="filterCategory('sweets')" class="cat-btn bg-white border border-amber-200 text-slate-700 hover:bg-amber-50 font-semibold text-xs sm:text-sm px-4 py-2 rounded-full whitespace-nowrap transition">
+                🍬 Festive Sweets
+            </button>
+            <button onclick="filterCategory('dryfruits')" class="cat-btn bg-white border border-amber-200 text-slate-700 hover:bg-amber-50 font-semibold text-xs sm:text-sm px-4 py-2 rounded-full whitespace-nowrap transition">
+                🥜 Dry Fruits & Nuts
+            </button>
+            <button onclick="filterCategory('staples')" class="cat-btn bg-white border border-amber-200 text-slate-700 hover:bg-amber-50 font-semibold text-xs sm:text-sm px-4 py-2 rounded-full whitespace-nowrap transition">
+                🌾 Oils & Staples
+            </button>
+            <button onclick="filterCategory('pooja')" class="cat-btn bg-white border border-amber-200 text-slate-700 hover:bg-amber-50 font-semibold text-xs sm:text-sm px-4 py-2 rounded-full whitespace-nowrap transition">
+                🪔 Pooja Essentials
+            </button>
+        </div>
+
+        <!-- PRODUCT GRID -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Products dynamic insertion via JavaScript -->
+        </div>
+    </main>
+
+    <!-- LIVE CALCULATOR & CART MODAL / DRAWER -->
+    <div id="calcModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden transition-opacity flex justify-end">
+        <div class="w-full max-w-md bg-white h-full shadow-2xl flex flex-col justify-between transform transition-transform duration-300">
+            
+            <!-- HEADER -->
+            <div class="p-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white flex items-center justify-between shadow">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="calculator" class="w-6 h-6"></i>
+                    <div>
+                        <h3 class="font-bold text-lg leading-tight">Diwali Budget Calculator</h3>
+                        <p class="text-xs text-amber-100">Estimate items & festive discounts</p>
+                    </div>
+                </div>
+                <button onclick="toggleCalculator()" class="text-white hover:bg-white/20 p-1 rounded-full transition">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- CART / ITEMS LIST -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cartItemList">
+                <div id="emptyCartState" class="text-center py-12 text-slate-400">
+                    <i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-3 opacity-40"></i>
+                    <p class="font-medium text-slate-600">Your Diwali Basket is Empty!</p>
+                    <p class="text-xs mt-1">Add items from the store to calculate your savings.</p>
+                </div>
+            </div>
+
+            <!-- CALCULATOR SUMMARY & DISCOUNT LOGIC -->
+            <div class="p-4 bg-amber-50/80 border-t border-amber-200 space-y-3">
+                <div class="space-y-1.5 text-xs sm:text-sm">
+                    <div class="flex justify-between text-slate-600">
+                        <span>Subtotal:</span>
+                        <span id="subtotalAmount" class="font-semibold">₹0</span>
+                    </div>
+                    <div class="flex justify-between text-green-700 font-medium">
+                        <span>Diwali Special Savings (Discount):</span>
+                        <span id="discountAmount">- ₹0</span>
+                    </div>
+                    <div id="extraPromoRow" class="flex justify-between text-orange-600 font-medium hidden">
+                        <span>Promo Code (DIWALI2026):</span>
+                        <span id="promoAmount">- ₹0</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>Estimated Delivery:</span>
+                        <span class="text-green-600 font-semibold">FREE</span>
+                    </div>
+                    <hr class="border-amber-200 my-1">
+                    <div class="flex justify-between text-base font-extrabold text-slate-900">
+                        <span>Grand Total:</span>
+                        <span id="grandTotalAmount" class="text-orange-600">₹0</span>
+                    </div>
+                </div>
+
+                <!-- PROMO CODE INPUT -->
+                <div class="flex gap-2">
+                    <input type="text" id="couponInput" placeholder="Promo (e.g. DIWALI2026)" class="flex-1 text-xs px-3 py-2 border border-amber-300 rounded-lg focus:outline-none uppercase">
+                    <button onclick="applyCoupon()" class="bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs px-3 py-2 rounded-lg transition">
+                        Apply
+                    </button>
+                </div>
+                <p id="couponMsg" class="text-xs font-semibold hidden"></p>
+
+                <button onclick="checkoutMock()" class="w-full py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-extrabold text-sm rounded-xl shadow-lg hover:from-orange-600 hover:to-amber-600 transition flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> Proceed to Order (Mock)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LUCKY SPIN WHEEL MODAL -->
+    <div id="wheelModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center border-4 border-amber-300 shadow-2xl relative">
+            <button onclick="toggleWheelModal()" class="absolute top-3 right-3 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="text-3xl mb-1">🎯</div>
+            <h3 class="font-festive text-2xl font-bold text-orange-600">Diwali Lucky Coupon Spin</h3>
+            <p class="text-xs text-slate-500 mb-4">Spin to unlock extra surprise festive discounts!</p>
+            
+            <div class="w-48 h-48 mx-auto relative flex items-center justify-center bg-gradient-to-tr from-amber-400 to-orange-500 rounded-full border-4 border-amber-200 shadow-inner my-4">
+                <div id="wheelPointer" class="text-center font-bold text-white p-4">
+                    <i data-lucide="gift" class="w-12 h-12 mx-auto mb-1"></i>
+                    <span class="text-xs">Tap Spin Below!</span>
+                </div>
+            </div>
+
+            <button onclick="spinWheel()" id="spinBtn" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-sm transition">
+                Spin Now 🪔
+            </button>
+            <p id="spinResult" class="text-xs font-bold text-green-700 mt-3 hidden"></p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-white pt-10 pb-6 border-t-4 border-amber-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-xs sm:text-sm">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-2xl">🪔</span>
+                    <span class="font-festive text-xl text-amber-400 font-bold">Shubh Labh Groceries</span>
+                </div>
+                <p class="text-slate-400 leading-relaxed">
+                    Bringing warmth, festive joy, and authentic premium grocery essentials to your home this Diwali season.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold text-amber-400 mb-3 text-sm">Festive Categories</h4>
+                <ul class="space-y-2 text-slate-400">
+                    <li><a href="#products" onclick="filterCategory('sweets')" class="hover:text-amber-300">Indian Sweets & Mithai</a></li>
+                    <li><a href="#products" onclick="filterCategory('dryfruits')" class="hover:text-amber-300">Premium Dry Fruits</a></li>
+                    <li><a href="#products" onclick="filterCategory('pooja')" class="hover:text-amber-300">Laxmi Pooja Thali & Diya</a></li>
+                    <li><a href="#products" onclick="filterCategory('staples')" class="hover:text-amber-300">Pure Cow Ghee & Oils</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-amber-400 mb-3 text-sm">Customer Support</h4>
+                <ul class="space-y-2 text-slate-400">
+                    <li>Track Diwali Order</li>
+                    <li>Bulk Gifting Enquiries</li>
+                    <li>Express Festive Delivery</li>
+                    <li>FAQs & Returns</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-amber-400 mb-3 text-sm">Payment & Security</h4>
+                <p class="text-slate-400 mb-3">Safe & Instant Payments Powered by UPI, Credit Cards & NetBanking.</p>
+                <div class="flex gap-2 text-2xl">
+                    💳 📱 🏦 💵
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 border-t border-slate-800 text-center text-slate-500 text-xs">
+            © 2026 Shubh Labh Festive Store. Designed with vibrant lights & code for web developers.
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Sample Product Data with Festive Discounts
+        const products = [
+            {
+                id: 1,
+                name: "Kaju Katli Special Sweet Box (500g)",
+                category: "sweets",
+                originalPrice: 650,
+                discountPrice: 499,
+                discountPercent: "23% OFF",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&q=80&w=500",
+                badge: "Diwali Bestseller"
+            },
+            {
+                id: 2,
+                name: "Premium Roasted Almonds & Cashews Box (1kg)",
+                category: "dryfruits",
+                originalPrice: 1400,
+                discountPrice: 999,
+                discountPercent: "28% OFF",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1596568359553-a56de6970068?auto=format&fit=crop&q=80&w=500",
+                badge: "Festive Pack"
+            },
+            {
+                id: 3,
+                name: "Pure Vedic Cow Ghee (1 Litre)",
+                category: "staples",
+                originalPrice: 850,
+                discountPrice: 699,
+                discountPercent: "17% OFF",
+                rating: 5.0,
+                image: "https://images.unsplash.com/photo-1589927986089-35812388d1f4?auto=format&fit=crop&q=80&w=500",
+                badge: "Pure & Organic"
+            },
+            {
+                id: 4,
+                name: "Handcrafted Brass Diya Set (Pack of 4)",
+                category: "pooja",
+                originalPrice: 599,
+                discountPrice: 349,
+                discountPercent: "41% OFF",
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1605883705077-8d3d3a0889f8?auto=format&fit=crop&q=80&w=500",
+                badge: "Handmade"
+            },
+            {
+                id: 5,
+                name: "Motichoor Ladoo Box (1kg)",
+                category: "sweets",
+                originalPrice: 500,
+                discountPrice: 380,
+                discountPercent: "24% OFF",
+                rating: 4.6,
+                image: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&q=80&w=500",
+                badge: "Freshly Made"
+            },
+            {
+                id: 6,
+                name: "California Walnuts Premium (500g)",
+                category: "dryfruits",
+                originalPrice: 750,
+                discountPrice: 549,
+                discountPercent: "26% OFF",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&q=80&w=500",
+                badge: "Superfood"
+            },
+            {
+                id: 7,
+                name: "Laxmi Ganesha Brass Idol & Pooja Oil",
+                category: "pooja",
+                originalPrice: 999,
+                discountPrice: 649,
+                discountPercent: "35% OFF",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1605883705077-8d3d3a0889f8?auto=format&fit=crop&q=80&w=500",
+                badge: "Blessed Item"
+            },
+            {
+                id: 8,
+                name: "Basmati Rice Royal Extra Long (5kg)",
+                category: "staples",
+                originalPrice: 899,
+                discountPrice: 720,
+                discountPercent: "19% OFF",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=500",
+                badge: "Festive Essential"
+            }
+        ];
+
+        // CART STATE
+        let cart = [];
+        let appliedPromoCode = "";
+        let promoDiscountPercent = 0;
+
+        // RENDER PRODUCTS
+        function renderProducts(itemsToRender) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            if (itemsToRender.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-500">
+                        <p class="text-lg font-bold">No products found!</p>
+                        <p class="text-xs">Try searching for something else like sweets, ghee, or dry fruits.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            itemsToRender.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-4 shadow-sm hover:shadow-xl border border-amber-100 transition transform hover:-translate-y-1 flex flex-col justify-between relative group";
+                
+                card.innerHTML = `
+                    <div>
+                        <!-- DISCOUNT BADGE -->
+                        <span class="absolute top-6 left-6 z-10 bg-red-500 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow">
+                            ${prod.discountPercent}
+                        </span>
+
+                        <!-- PRODUCT IMAGE -->
+                        <div class="w-full h-44 rounded-xl overflow-hidden bg-amber-50 mb-3 relative">
+                            <img src="${prod.image}" 
+                                 alt="${prod.name}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+                                 onerror="this.src='https://placehold.co/400x300/FF9933/FFFFFF?text=${encodeURIComponent(prod.name)}'">
+                        </div>
+
+                        <!-- BADGE & TITLE -->
+                        <span class="text-[10px] font-bold tracking-wider text-amber-600 uppercase bg-amber-50 px-2 py-0.5 rounded">
+                            ${prod.badge}
+                        </span>
+                        <h3 class="font-bold text-slate-800 text-sm mt-1 line-clamp-2">${prod.name}</h3>
+                        
+                        <!-- RATING -->
+                        <div class="flex items-center gap-1 text-amber-500 text-xs my-2">
+                            <span>⭐ ${prod.rating}</span>
+                            <span class="text-slate-400 text-[11px]">(40+ Reviews)</span>
+                        </div>
+                    </div>
+
+                    <!-- PRICING & ADD BUTTON -->
+                    <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <div>
+                            <span class="text-base font-extrabold text-slate-900">₹${prod.discountPrice}</span>
+                            <span class="text-xs text-slate-400 line-through ml-1">₹${prod.originalPrice}</span>
+                        </div>
+                        <button onclick="addToCart('${prod.name.replace(/'/g, "\\'")}', ${prod.discountPrice}, '${prod.image}')" 
+                                class="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-xs px-3 py-2 rounded-lg shadow-sm transition active:scale-95 flex items-center gap-1">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Refresh icons after dynamic injection
+            lucide.createIcons();
+        }
+
+        // FILTER CATEGORY
+        function filterCategory(cat) {
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-gradient-to-r', 'from-orange-500', 'to-amber-500', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-amber-200');
+            });
+
+            // Highlight current button
+            event.currentTarget.classList.remove('bg-white', 'text-slate-700', 'border', 'border-amber-200');
+            event.currentTarget.classList.add('bg-gradient-to-r', 'from-orange-500', 'to-amber-500', 'text-white');
+
+            if (cat === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        // SEARCH FUNCTIONALITY
+        function filterProducts() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+            renderProducts(filtered);
+        }
+
+        function filterProductsMobile() {
+            const term = document.getElementById('searchInputMobile').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+            renderProducts(filtered);
+        }
+
+        // ADD TO CART & CALCULATOR LOGIC
+        function addToCart(name, price, image) {
+            const existing = cart.find(item => item.name === name);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ name, price, image, qty: 1 });
+            }
+            updateCartUI();
+            
+            // Subtle notification trigger or auto-open calculator badge update
+            const badge = document.getElementById('cartCountBadge');
+            badge.classList.add('animate-bounce');
+            setTimeout(() => badge.classList.remove('animate-bounce'), 1000);
+        }
+
+        function updateCartQty(index, change) {
+            cart[index].qty += change;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById('cartItemList');
+            const countBadge = document.getElementById('cartCountBadge');
+            const subtotalEl = document.getElementById('subtotalAmount');
+            const discountEl = document.getElementById('discountAmount');
+            const promoRow = document.getElementById('extraPromoRow');
+            const promoEl = document.getElementById('promoAmount');
+            const grandTotalEl = document.getElementById('grandTotalAmount');
+
+            // Total Quantity
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            countBadge.innerText = totalQty;
+
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div id="emptyCartState" class="text-center py-12 text-slate-400">
+                        <i data-lucide="shopping-bag" class="w-16 h-16 mx-auto mb-3 opacity-40"></i>
+                        <p class="font-medium text-slate-600">Your Diwali Basket is Empty!</p>
+                        <p class="text-xs mt-1">Add items from the store to calculate your savings.</p>
+                    </div>
+                `;
+                subtotalEl.innerText = '₹0';
+                discountEl.innerText = '- ₹0';
+                grandTotalEl.innerText = '₹0';
+                promoRow.classList.add('hidden');
+                lucide.createIcons();
+                return;
+            }
+
+            // Render Items
+            list.innerHTML = '';
+            let subtotal = 0;
+
+            cart.forEach((item, idx) => {
+                const itemTotal = item.price * item.qty;
+                subtotal += itemTotal;
+
+                const row = document.createElement('div');
+                row.className = "flex items-center gap-3 p-2 bg-slate-50 rounded-xl border border-slate-100";
+                row.innerHTML = `
+                    <img src="${item.image}" class="w-12 h-12 object-cover rounded-lg border border-amber-200" onerror="this.src='https://placehold.co/100x100/FF9933/FFFFFF?text=Item'">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-bold text-xs text-slate-800 truncate">${item.name}</h4>
+                        <span class="text-xs text-orange-600 font-extrabold">₹${item.price}</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-slate-200">
+                        <button onclick="updateCartQty(${idx}, -1)" class="text-slate-600 font-bold hover:text-red-500 text-xs px-1">-</button>
+                        <span class="text-xs font-bold text-slate-800">${item.qty}</span>
+                        <button onclick="updateCartQty(${idx}, 1)" class="text-slate-600 font-bold hover:text-green-600 text-xs px-1">+</button>
+                    </div>
+                `;
+                list.appendChild(row);
+            });
+
+            // Automatic Diwali Discount Calculation (e.g. 10% auto savings)
+            const baseDiscount = Math.round(subtotal * 0.10); 
+            let promoDiscount = Math.round((subtotal * promoDiscountPercent) / 100);
+
+            let grandTotal = subtotal - baseDiscount - promoDiscount;
+            if (grandTotal < 0) grandTotal = 0;
+
+            subtotalEl.innerText = `₹${subtotal}`;
+            discountEl.innerText = `- ₹${baseDiscount}`;
+
+            if (promoDiscountPercent > 0) {
+                promoRow.classList.remove('hidden');
+                promoEl.innerText = `- ₹${promoDiscount}`;
+            } else {
+                promoRow.classList.add('hidden');
+            }
+
+            grandTotalEl.innerText = `₹${grandTotal}`;
+            lucide.createIcons();
+        }
+
+        // PROMO CODE APPLICATION
+        function applyCoupon() {
+            const input = document.getElementById('couponInput').value.trim().toUpperCase();
+            const msg = document.getElementById('couponMsg');
+
+            if (input === 'DIWALI2026') {
+                promoDiscountPercent = 15;
+                msg.innerText = '✅ Code DIWALI2026 Applied! (Extra 15% OFF)';
+                msg.className = 'text-xs font-semibold text-green-600';
+                msg.classList.remove('hidden');
+            } else if (input === 'SPIN10') {
+                promoDiscountPercent = 10;
+                msg.innerText = '✅ Code SPIN10 Applied! (Extra 10% OFF)';
+                msg.className = 'text-xs font-semibold text-green-600';
+                msg.classList.remove('hidden');
+            } else {
+                msg.innerText = '❌ Invalid Promo Code. Try DIWALI2026';
+                msg.className = 'text-xs font-semibold text-red-500';
+                msg.classList.remove('hidden');
+            }
+            updateCartUI();
+        }
+
+        // TOGGLE CALCULATOR DRAWER
+        function toggleCalculator() {
+            const modal = document.getElementById('calcModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function scrollToCalc() {
+            toggleCalculator();
+        }
+
+        // MOCK CHECKOUT
+        function checkoutMock() {
+            if (cart.length === 0) {
+                alert("Your cart is empty! Add some Diwali items first.");
+                return;
+            }
+            alert("🎉 Happy Diwali! Your order has been placed successfully! (This is a website demo)");
+            cart = [];
+            updateCartUI();
+            toggleCalculator();
+        }
+
+        // LUCKY SPIN WHEEL LOGIC
+        function toggleWheelModal() {
+            const modal = document.getElementById('wheelModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function spinWheel() {
+            const btn = document.getElementById('spinBtn');
+            const pointer = document.getElementById('wheelPointer');
+            const res = document.getElementById('spinResult');
+
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
+            pointer.innerText = "Spinning...";
+
+            setTimeout(() => {
+                pointer.innerHTML = "🎁<br><strong>10% OFF</strong>";
+                res.innerText = "Congratulations! Use coupon: SPIN10 in the calculator!";
+                res.classList.remove('hidden');
+                document.getElementById('couponInput').value = "SPIN10";
+            }, 1200);
+        }
+
+        // INITIALIZE ON LOAD
+        window.onload = function() {
+            renderProducts(products);
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
